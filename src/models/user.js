@@ -16,7 +16,12 @@ class User extends Model {
 
         const token = jwt.sign({username: user.username.toString()}, privateKey, {algorithm: 'RS256'});
         user.tokens.push(token);
-        await user.save({ fields: ['tokens'] });
+        console.log(user.tokens);
+        await User.update({tokens: user.tokens}, {
+            where: {
+                username: user.username.toString(),
+            }
+        })
         return token;
     }
 
@@ -98,7 +103,7 @@ User.init({
     },
     avatar: {
         type: DataTypes.STRING,
-        defaultValue: '/images/avatar/default.png',
+        defaultValue: 'default.png',
     },
     bio: {
         type: DataTypes.STRING,
